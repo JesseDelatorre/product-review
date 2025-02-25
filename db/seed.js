@@ -1,7 +1,7 @@
 const client = require('./client.js');
 const { createUser } = require('./users.js');
 const { createProduct } = require('./products.js');
-
+const { createReview } = require('./reviews.js');
 
 const dropTables = async () => {
   try {
@@ -35,7 +35,7 @@ const createTable = async () => {
   id SERIAL PRIMARY KEY,
   review TEXT NOT NULL,
   product_id INTEGER REFERENCES products(id),
-  customer_id INTEGER REFERENCES users(id)
+  user_id INTEGER REFERENCES users(id)
   );
   `)
   } catch (err) {
@@ -57,19 +57,28 @@ const syncAndSeed = async () => {
     console.log('tables created');
 
     console.log('creating users');
-    await createUser('Jesse', 'kumiho');
-    await createUser('Griz', 'grizyeah');
-    await createUser('Clozee', 'perfect');
-    await createUser('Wooli', 'saywooli');
-    await createUser('Subtronics', 'sploinky');
+    const jesse = await createUser('Jesse', 'kumiho');
+    const griz = await createUser('Griz', 'grizyeah');
+    const clozee = await createUser('Clozee', 'perfect');
+    const wooli = await createUser('Wooli', 'saywooli');
+    const subtronics = await createUser('Subtronics', 'sploinky');
     console.log('user created');
 
     console.log('creating products');
-    await createProduct('DDJ-1000', 'A DJ controller that requires a laptop to use.');
-    await createProduct('Pioneer Opus', 'A standalone DJ controller that only requires a usb with compatable formated music to use.');
-    await createProduct('32GB USB', 'A USB compatable with standalone DJ controllers');
-    await createProduct('Headphones', 'Headphones to use with your DJ controller, high quality speakers for crystal clear sound while DJing');
+    const ddj1000 = await createProduct('DDJ-1000', 'A DJ controller that requires a laptop to use.');
+    const opus = await createProduct('Pioneer Opus', 'A standalone DJ controller that only requires a usb with compatable formated music to use.');
+    const usb = await createProduct('32GB USB', 'A USB compatable with standalone DJ controllers');
+    const headphones = await createProduct('Headphones', 'Headphones to use with your DJ controller, high quality speakers for crystal clear sound while DJing');
     console.log('product created');
+
+    console.log('creating review');
+    await createReview('great product', usb.id, jesse.id);
+    await createReview('I love playing mixes on this!', opus.id, griz.id);
+    await createReview('Easy to use and set up', ddj1000.id, wooli.id);
+    await createReview('Best headphones i have ever owned', headphones.id, subtronics.id);
+    await createReview('My go to USB', usb.id, clozee.id);
+    await createReview('Sound quality is crisp', headphones.id, jesse.id);
+    console.log('review created');
 
     await client.end();
     console.log('D/C from db')
