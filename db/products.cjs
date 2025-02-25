@@ -1,8 +1,7 @@
-const client = require('./client.js');
+const client = require('./client.cjs');
 
 const createProduct = async (productName, productDescription) => {
   try {
-    // console.log('inside create product');
     const { rows } = await client.query(`
     INSERT INTO products (name, description)
     VALUES ( '${productName}', '${productDescription}')
@@ -15,27 +14,26 @@ const createProduct = async (productName, productDescription) => {
   }
 }
 
-const getAllProducts = async() => {
+const getAllProducts = async () => {
   try {
     const { rows: retrievedProducts } = await client.query(`
       SELECT * FROM products;
     `);
 
     return retrievedProducts;
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
 }
 
-const getProductById = async(productId) => {
+const getProductById = async (productId) => {
   try {
     const { rows } = await client.query(`
       SELECT * FROM products WHERE id=${productId};
     `);
-
     const singleProduct = rows[0];
     return singleProduct;
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
 }
