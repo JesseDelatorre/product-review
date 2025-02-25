@@ -1,5 +1,6 @@
 const client = require('./client.js');
 const { createUser } = require('./users.js');
+const { createProduct } = require('./products.js');
 
 
 const dropTables = async () => {
@@ -62,6 +63,13 @@ const syncAndSeed = async () => {
     await createUser('Wooli', 'saywooli');
     await createUser('Subtronics', 'sploinky');
     console.log('user created');
+
+    console.log('creating products');
+    await createProduct('DDJ-1000', 'A DJ controller that requires a laptop to use.');
+    await createProduct('Pioneer Opus', 'A standalone DJ controller that only requires a usb with compatable formated music to use.');
+    await createProduct('32GB USB', 'A USB compatable with standalone DJ controllers');
+    await createProduct('Headphones', 'Headphones to use with your DJ controller, high quality speakers for crystal clear sound while DJing');
+    console.log('product created');
 
     await client.end();
     console.log('D/C from db')
