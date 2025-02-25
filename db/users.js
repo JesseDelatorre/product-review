@@ -1,17 +1,20 @@
 const client = require('./client.js');
 
-const createUser = async( username, password) => {
-  try{
-// console.log('creating user');
-await client.query(`
+const createUser = async (username, password) => {
+  try {
+    const { rows } = await client.query(`
  INSERT INTO users (username, password)
  VALUES ( '${username}', '${password}')
  RETURNING *;
   `);
-  }catch(err) {
+    const user = rows[0];
+    return user;
+  } catch (err) {
     console.log(err);
   }
 }
+
+
 
 module.exports = {
   createUser
