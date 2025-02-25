@@ -1,0 +1,73 @@
+const client = require('./client.js');
+const { createUser } = require('./users.js');
+
+
+const dropTables = async () => {
+  try {
+    await client.query(`
+     DROP TABLE IF EXISTS reviews;
+     DROP TABLE IF EXISTS products;
+     DROP TABLE IF EXISTS users; 
+      `)
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const createTable = async () => {
+  try {
+    // console.log('creating tables');
+    await client.query(`
+  CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(30) UNIQUE NOT NULL,
+  password VARCHAR(60)
+  );
+
+  CREATE TABLE  products(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(30) NOT NULL,
+  description TEXT
+  );
+
+  CREATE TABLE reviews (
+  id SERIAL PRIMARY KEY,
+  review TEXT NOT NULL,
+  product_id INTEGER REFERENCES products(id),
+  customer_id INTEGER REFERENCES users(id)
+  );
+  `)
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const syncAndSeed = async () => {
+  try {
+    await client.connect();
+    console.log('connected to db');
+
+    console.log('dropping tables');
+    await dropTables();
+    console.log('tables dropped');
+
+    console.log('creating tables');
+    await createTable();
+    console.log('tables created');
+
+    console.log('creating users');
+    await createUser('Jesse', 'kumiho');
+    await createUser('Griz', 'grizyeah');
+    await createUser('Clozee', 'perfect');
+    await createUser('Wooli', 'saywooli');
+    await createUser('Subtronics', 'sploinky');
+    console.log('user created');
+
+    await client.end();
+    console.log('D/C from db')
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+syncAndSeed();
