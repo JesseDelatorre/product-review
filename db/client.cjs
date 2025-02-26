@@ -1,4 +1,5 @@
+require('dotenv').config();
 const { Client } = require('pg');
-const client = new Client('postgres://localhost:5432/product_review');
+const client = new Client(process.env.DATABASE_URL);
 
 module.exports = client;

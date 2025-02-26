@@ -1,7 +1,7 @@
 const client = require('./client.cjs');
 const { createUser } = require('./users.cjs');
-const { createProduct, getProductById } = require('./products.cjs');
-const { createReview } = require('./reviews.cjs');
+const { createProduct } = require('./products.cjs');
+const { createReview, getReviewsByProducts } = require('./reviews.cjs');
 
 const dropTables = async () => {
   try {
@@ -72,13 +72,14 @@ const syncAndSeed = async () => {
     console.log('product created');
 
     console.log('creating review');
-    await createReview('great product', usb.id, jesse.id);
-    await createReview('I love playing mixes on this!', opus.id, griz.id);
-    await createReview('Easy to use and set up', ddj1000.id, wooli.id);
-    await createReview('Best headphones i have ever owned', headphones.id, subtronics.id);
-    await createReview('My go to USB', usb.id, clozee.id);
-    await createReview('Sound quality is crisp', headphones.id, jesse.id);
+    await createReview('great product', usb.id, 1);
+    await createReview('I love playing mixes on this!', opus.id, 2);
+    await createReview('Easy to use and set up', ddj1000.id, 4);
+    await createReview('Best headphones i have ever owned', headphones.id, 5);
+    await createReview('My go to USB', usb.id, 3);
+    await createReview('Sound quality is crisp', headphones.id, 1);
     console.log('review created');
+
 
     await client.end();
     console.log('D/C from db')
